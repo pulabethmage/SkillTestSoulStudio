@@ -149,6 +149,6 @@ public class LoadBooks extends AppCompatActivity {
                 this,Imgv_bookthum,Tv_bookTitle,Tv_bookDes,arraybookthumbnails,arraybooktitles,arraybookdescriptions);
         recyclerView.setAdapter(adapter);
     }
-    
+
 
 }
