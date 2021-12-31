@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ public class LoadBooks extends AppCompatActivity {
     ImageView Imgv_bookthum;
     TextView Tv_bookTitle,Tv_bookDes;
 
+    ProgressDialog progressDialog;
+
 
     private ArrayList<String> arraybooktitles= new ArrayList<>();
     private ArrayList<String> arraybookdescriptions= new ArrayList<>();
@@ -37,6 +40,8 @@ public class LoadBooks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_books);
 
+        progressDialog = new ProgressDialog(LoadBooks.this);
+
         Imgv_bookthum = findViewById(R.id.book_tumbnail);
         Tv_bookTitle = findViewById(R.id.book_title);
         Tv_bookDes = findViewById(R.id.book_description);
@@ -46,6 +51,12 @@ public class LoadBooks extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadBooks();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
     }
 
     public void loadBooks()
@@ -62,7 +73,7 @@ public class LoadBooks extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-
+                            progressDialog.dismiss();
                             setresponse(response);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -75,12 +86,14 @@ public class LoadBooks extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        progressDialog.dismiss();
                         error.printStackTrace();
 
                     }
                 });
 
+        progressDialog.setMessage("\tLoading Books...");
+        progressDialog.show();
         queue.add(request);
 
         queue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
@@ -136,9 +149,6 @@ public class LoadBooks extends AppCompatActivity {
                 this,Imgv_bookthum,Tv_bookTitle,Tv_bookDes,arraybookthumbnails,arraybooktitles,arraybookdescriptions);
         recyclerView.setAdapter(adapter);
     }
-
-
-
-
+    
 
 }
